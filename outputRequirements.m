@@ -2,7 +2,7 @@ function [] = outputRequirements(xi,yi,yi_r,varTable,date,title_plot,dat1,dat2,a
  
     switch(autoGenSystemChoice)
         case 0
-            display("Autogen OFF ran.");
+            display("Autogen OFF.");
         case 1      % v4 standard
             autoGenGraphs(autoGenChoiceList,varTable,date,title_plot,dat1,dat2);
             display("Autogen standard ran.");
@@ -12,6 +12,9 @@ function [] = outputRequirements(xi,yi,yi_r,varTable,date,title_plot,dat1,dat2,a
         case 3      % v5.1 Test
             autoGenGraphs_v5_1(autoGenChoiceList,varTable,date,title_plot,dat1,dat2);
             display("Autogen v5.1-Test SR-TorqueTrends Config ran.");        
+        case 4      % CAFU
+            autoGenGraphs_CAFU(autoGenChoiceList,varTable,date,title_plot,dat1,dat2);
+            display("Autogen CAFU ran.");  
     end
     
     %%%%%%%%%%%%%%%%%%%%%%% End goal -- variables to plot %%%%%%%%%%%%%%%%%%

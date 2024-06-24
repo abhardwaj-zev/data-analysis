@@ -7,22 +7,35 @@
 % data file location
 % outputs you want
 % specific analysis
-
-clear all;
 clc;
 close all;
-fileno = 1202;
+fileno = 102;
 [varTable,date,title_plot,dat1,dataSource] = dataInitialize(fileno);
-
+display("Data Initialized"); !git !git !111
 %%  Derived Quantities
-
+clearvars -except varTable date title_plot dat1 dataSource fileno
 HVBtHighLevelTemps = 1;
 HVBt2HighLevelTemps = 0;
-EberHtr = 0;
-WebastoHtr = 0;
+HVBt3HighLevelTemps = 0;
+HVBt4HighLevelTemps = 0;
+
+EberHtr = 1;
+WebastoHtr = 1;
+
 MotorFlowSwitch = 0;
 
-Quantities = [HVBtHighLevelTemps,HVBt2HighLevelTemps,EberHtr,WebastoHtr,MotorFlowSwitch];
+ModuleHeatCapacityFromEnergyBalance = 0;
+PackHeatGen = 0;
+
+BatteryCoolingEffect = 0;
+BatteryTempDiagnostic = 0;
+
+BBTemps = 0;
+ELCoolingEffect = 0;
+
+Quantities = [HVBtHighLevelTemps,HVBt2HighLevelTemps,EberHtr,WebastoHtr,MotorFlowSwitch,...
+    ModuleHeatCapacityFromEnergyBalance,PackHeatGen,HVBt3HighLevelTemps,HVBt4HighLevelTemps,...
+    BatteryCoolingEffect,BatteryTempDiagnostic, BBTemps, ELCoolingEffect];
 
 OtherInputData = [4];               % flow rate through heater
 [varTable,dat2] = getDerivedQuantities(varTable,dat1,dataSource,OtherInputData,Quantities);
@@ -34,25 +47,32 @@ OtherInputData = [4];               % flow rate through heater
 % should become available in the main workspace. And the outputReq function
 % can dissect and analyze that
 
-%%%%% AUTOGEN %%%%%
+%%%%%%% AUTOGEN %%%%%
 % variable serial numbers only true for full analysis of vehicle data - no missing
 % variables
 
-autoGenSystemChoice = 3;        
+autoGenSystemChoice = 0;        
 % 0 - no autogen
 % 1 - standard
 % 2 - brightview
 % 3 - v5.1 
-    odo = 1;
+% 4 - CAFU
+    odo = 0;
     hvacMd = 1;
-    motor = 1;
-    inv = 1;
-    dcdc = 1;
-    battery = 1;
+    motor = 0;
+    inv = 0;
+    dcdc = 0;
+    batteryHighLevel = 1;
     battery_soc_temps = 0;
     battery_soc_temps2 = 0;
     battery2_soc_temps = 0;
-autoGenChoiceList = [odo,hvacMd,motor,inv,dcdc,battery,battery_soc_temps,battery_soc_temps2,battery2_soc_temps]; 
+       
+    BBTemps  = 1;
+    CCSElectrical = 1;
+    Compressors = 1;
+    BatteryModuleLevel = 0;
+
+autoGenChoiceList = [odo,hvacMd,motor,inv,dcdc,batteryHighLevel,battery_soc_temps,battery_soc_temps2,battery2_soc_temps,BBTemps,CCSElectrical,Compressors,BatteryModuleLevel]; 
 xi=1;
 yi = [];    yi_r=[];
 outputRequirements(xi,yi,yi_r,varTable,date,title_plot,dat1,dat2,autoGenSystemChoice,autoGenChoiceList);
@@ -60,10 +80,17 @@ outputRequirements(xi,yi,yi_r,varTable,date,title_plot,dat1,dat2,autoGenSystemCh
 
 %%
 %%%%%% ONE-OFF %%%%%%%
-autoGenSystemChoice = 0; %%%% DO NOT CHANGE THIS. AUTOGEN TURNED OFF FOR ONE-OFF %%%
-xi=1;
-yi = [26:31,38];    yi_r=[];
-outputRequirements(xi,yi,yi_r,varTable,date,title_plot,dat1,dat2,autoGenSystemChoice,autoGenChoiceList);
+autoGenSystemChoice = 0; %%%% DO NOT CHANGE THIS. AUTOGEN TURNED OFF FOR ONE-OFF GRAPHS %%%
+oneoff = 1;
+
+if(oneoff)
+    xi=1;
+      
+    yi = [41]; yi_r=[];                          % Battery 1 Module High Level Temps
+    plotVar(xi,yi,dat1,dat2,varTable,yi_r,date,title_plot);
+
+    display("Oneoff graphs displayed.");
+end
 %%%%%%%%%%%%%%%%%%%%%
 
 % end goal should be -
